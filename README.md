@@ -1,7 +1,6 @@
 <p align="center">
-  <h1 align="center">Sekai</h1>
+  <h1 align="center">Sekai ＊ 世界</h1>
   <h4 align="center">A multipurpose Discord bot.</h4>
-  <h4 align="center">Rewrite of the old <a href="https://top.gg/bot/772460495949135893">Sekai</a></h4>
 
   <h6 align="center">
     <a href="https://github.com/acedron/sekai" alt="License">
@@ -19,9 +18,13 @@
   </h6>
 
   <h3 align="center">
-    <a href="https://www.youtube.com/watch?v=K0MDWjelrgY" alt="Invite">
-        Invite to Your Server! [Unavailable]</a>
+    <a href="https://top.gg/bot/772460495949135893/invite" alt="Invite">
+        Invite to Your Server!</a>
   </h3>
+
+  <h4 align="center">
+    This project is still a work in progress!
+  </h4>
 </p>
 
 ## Usage
