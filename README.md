@@ -43,8 +43,27 @@ $ cd sekai
 $ npm i
 ```
 
-* Make sure to do `FIXME`s in `.js` files.
-* You can run it using the following command in the directory:
+* Create a file named `tokens.json` in the directory and fill in like this.
+* You can download the `firebaseCredentials` from Firebase as a JSON file.
+
+```json
+{
+  "clientToken": "Client Token",
+  "topggToken": "top.gg API Token",
+  "firebaseCredentials": {
+    "type": "service_account",
+    "project_id": "Firebase Project ID",
+    "private_key_id": "Firebase Private Key ID",
+    "private_key": "Firebase Private Key",
+    "client_email": "Firebase Client E-Mail",
+    "client_id": "Firebase Client ID",
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "client_x509_cert_url": "Firebase Client Cert URL"
+  }
+}
+```
 
 ```bash
 $ npm start

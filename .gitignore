@@ -106,5 +106,4 @@ dist
 #
 # Production Stage
 #
-Procfile
-firebase.json
+tokens.json
