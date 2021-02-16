@@ -4,15 +4,17 @@ const admin = require('firebase-admin');
 const path = require('path');
 const fs = require('fs');
 
-const token = ''; // FIXME: Enter your bot token.
-const firebase = require(''); // FIXME: Require your Firebase admin credentials JSON file.
-const topggToken = ''; // FIXME: Enter your top.gg token.
+// FIXME: Create a file named './tokens.json' and fill it. See README.md
+const tokensObject = require('./tokens.json');
+const clientToken = tokensObject.clientToken;
+const topggToken = tokensObject.topggToken;
+const firebaseCredentials = tokensObject.firebaseCredentials;
 
 const client = new Discord.Client();
 const ap = AutoPoster(topggToken, client);
 
 admin.initializeApp({
-  credential: admin.credential.cert(firebase)
+  credential: admin.credential.cert(firebaseCredentials)
 });
 const db = admin.firestore();
 
@@ -52,4 +54,4 @@ client.on('message', message => {
 });
 
 client.on('invalidated', () => process.kill(process.pid, 'SIGTERM'));
-client.login(token);
+client.login(clientToken);
