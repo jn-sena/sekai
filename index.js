@@ -22,9 +22,6 @@ const api = new Topgg.Api(topggToken);
   setTimeout(postStats, 30 * 60 * 1e3);
 })();
 
-
-ap.on('posted', () => console.log(' => Successfully posted bot stats to top.gg.'));
-
 admin.initializeApp({
   credential: admin.credential.cert(firebaseCredentials)
 });
