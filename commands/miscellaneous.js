@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 
-const help = (message, client, _args, _db) => message.author.send(new Discord.MessageEmbed()
+const help = (message, client, _args, _db, _cache) => message.author.send(new Discord.MessageEmbed()
   .setColor('#85dbfc')
   .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
   .setTitle('Help')
@@ -14,7 +14,7 @@ const help = (message, client, _args, _db) => message.author.send(new Discord.Me
   .then(() => message.react('📜'))
   .catch(console.error);
 
-const commands = (message, client, _args, _db) => message.author.send(new Discord.MessageEmbed()
+const commands = (message, client, _args, _db, _cache) => message.author.send(new Discord.MessageEmbed()
   .setColor('#85dbfc')
   .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
   .setTitle('Commands')
