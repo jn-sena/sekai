@@ -28,12 +28,58 @@ const tokenExpired = () => fetch('https://osu.ppy.sh/oauth/token', {
 }));
 tokenExpired();
 
-const profile = (message, _client, args, _db, cache) => {
+const profile = async (message, _client, args, _db, cache) => {
+  let userId = message.author.id;
+  let mode = (args.length < 2) ? '' : `${args[1]}`;
+  if (message.mentions.users.first()) {
+    let userData = await cache.getUserData(message.mentions.users.first().id)
+      .catch(console.error);
+    userId = userData.osu_profile;
+  }
+  else if (args.length >= 1) userId = args[0];
 
+  fetch(`https://osu.ppy.sh/api/v2/users/${userId}/${mode}`, {
+    method: 'GET',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    }
+  }).then(response => response.json().then(data => {
+    if (data.hasOwnProperty('error')) message.channel.send(message.mentions.users.first() ? 'User has no profile set!' : 'Invalid user ID or mode!')
+      .catch(console.error);
+    else {
+      let joinedDate = new Date(data.join_date);
+      let joinedStr = joinedDate.toUTCString();
+      mode = mode ? mode : data.playmode;
+      message.channel.send(new Discord.MessageEmbed()
+        .setColor('#b90069')
+        .setAuthor('osu! Statistics', 'https://github.com/ppy/osu/blob/master/assets/lazer.png?raw=true', 'https://osu.ppy.sh')
+        .setTitle(data.username + (data.title ? ` ＊ ${data.title}` : ''))
+        .setDescription(`osu! **(**${mode}**)** profile of ${data.username}.`)
+        .setURL(`https://osu.ppy.sh/users/${userId}/${mode}`)
+        .addFields({ name: 'Statistics',  value: `**Level:** \`${data.statistics.level.current}\`\n\
+  **PP:** \`${data.statistics.pp}\`\n**Global Rank:** \`#${data.statistics.rank.global}\`\n\
+  **Country Rank:** \`#${data.statistics.rank.country}\`\n**Accuracy:** \`${data.statistics.hit_accuracy}%\`\n\
+  `, inline: true}, {name: 'Social', value: `**Country:** \`${data.country.name} (${data.country.code})\`\n\
+  **Discord:** \`${data.discord ? data.discord : 'Not provided.'}\`\n\
+  **Skype:** \`${data.skype ? data.skype : 'Not provided.'}\`\n\
+  **Twitter:** \`@${data.twitter ? data.twitter : 'Not provided.'}\`\n\
+  **Website:** ${data.website ? data.website : '\`Not provided.\`'}`, inline: true}, {name: 'Other', value: `\
+  **Supporter:** \`${data.is_supporter ? 'Supporter' : 'Not Supporter'}\`\n\
+  **Online:** \`${data.is_online ? 'Online' : 'Offline'}\`\n\
+  **Active:** \`${data.is_active ? 'Active' : 'Not Active'}\`\n\
+  **Interests:** \`${data.interests ? data.interests : 'Not provided.'}\`\n\
+  **Joined At:** \`${joinedStr}\``, inline: false})
+        .setTimestamp()
+        .setThumbnail(data.avatar_url)
+        .setFooter(`Requested by: ${message.author.tag}`, message.author.displayAvatarURL()));
+    }
+  }));
 }
 
 const setprofile = (message, _client, args, db, cache) => {
-  if (args.length < 1) message.channel.send('Please provide your osu! user id!')
+  if (args.length < 1) message.channel.send('Please provide your osu! user ID!')
     .catch(console.error)
   else {
     fetch(`https://osu.ppy.sh/api/v2/users/${args[0]}`, {
@@ -44,17 +90,18 @@ const setprofile = (message, _client, args, db, cache) => {
         'Authorization': `Bearer ${accessToken}`
       }
     }).then(response => response.json().then(data => {
-      if (Object.keys(data).includes('error')) message.channel.send('Invalid user id!')
+      if (data.hasOwnProperty('error')) message.channel.send('Invalid user id!')
         .catch(console.error);
       else db.collection('users').doc(message.author.id).set({
         osu_profile: args[0]
       }, { merge: true })
         .then(cache.cacheUserData(message.author.id))
+        .then(() => message)
         .catch(console.error);
     }));
   }
 }
 
 module.exports = {
-  setprofile
+  profile, setprofile
 };

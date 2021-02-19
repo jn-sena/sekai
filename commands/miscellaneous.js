@@ -21,7 +21,9 @@ const commands = (message, client, _args, _db, _cache) => message.author.send(ne
   .setDescription('The following commands are the things I can do.')
   .addFields(
     { name: 'Miscellaneous', value: '`&help` **=>** Shows the help text.\n\
-`&commands` **=>** Shows this text.', inline: true })
+`&commands` **=>** Shows this text.', inline: true },
+    { name: 'osu!', value: '`&profile <osuUserId | @user>` **=>** Shows osu! profile of user.\n\
+`&setprofile <osuUserId>` **=>** Sets the osu! user ID of yourself in Sekai database.', inline: true })
   .setTimestamp()
   .setFooter(`Requested by: ${message.author.tag}`, message.author.displayAvatarURL()))
   .then(() => message.react('📜'))
