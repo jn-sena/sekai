@@ -63,6 +63,10 @@ $ npm i
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
     "client_x509_cert_url": "Firebase Client Cert URL"
+  },
+  "osu": {
+    "clientId": 0,
+    "clientSecret": "osu! API Client Secret",
   }
 }
 ```
