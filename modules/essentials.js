@@ -2,7 +2,7 @@ const default_guild_doc = {
   prefix: '&',
   logs_channel: '',
   moderation_logs_channel: '',
-  autorole: ''
+  autoroles: []
 };
 
 const default_user_doc = {
