@@ -4,7 +4,6 @@ const admin = require('firebase-admin');
 const path = require('path');
 const fs = require('fs');
 
-const { default_guild_doc } = require('./modules/essentials');
 const Cache = require('./modules/cache');
 
 // FIXME: Create a file named './tokens.json' and fill it. See README.md.
@@ -15,6 +14,7 @@ const firebaseCredentials = tokensObject.firebaseCredentials;
 
 const client = new Discord.Client();
 const ap = AutoPoster(topggToken, client);
+ap.on('posted', () => console.log(' => Successfully posted bot stats to top.gg.'));
 
 admin.initializeApp({
   credential: admin.credential.cert(firebaseCredentials)
@@ -33,6 +33,7 @@ const setActivity = () => {
 let commandModules = [];
 
 client.on('ready', () => {
+  console.log(' => Bot authenticated successfully.');
   setActivity();
   setInterval(setActivity, 600e3);
 
@@ -46,18 +47,20 @@ client.on('message', async message => {
   if (message.author.bot) return;
 
   let prefix = '&';
-  if (message.guild) prefix = await (() => new Promise(resolve => Cache.getGuildData(message.guild.id)
-    .then(data => resolve(data.prefix))
-    .catch(console.error)));
+  if (message.guild) {
+    let guildData = await Cache.getGuildData(message.guild.id);
+    prefix = guildData.prefix;
+  }
   if (!message.content.startsWith(prefix)) return;
 
   let command = message.content.replace(prefix, '').split(/ +/g)[0].toLowerCase();
   let args = message.content.split(/ +/g);
-  args.splice(args.indexOf(`${prefix}${command}`, 1));
+  args.splice(args.indexOf(`${prefix}${command}`), 1);
 
   for (const i of commandModules) if (i[command]) {
     message.channel.startTyping();
     i[command](message, client, args, db, Cache);
+    message.channel.stopTyping(true);
     break;
   }
 });

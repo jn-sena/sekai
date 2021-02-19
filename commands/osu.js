@@ -29,14 +29,17 @@ const tokenExpired = () => fetch('https://osu.ppy.sh/oauth/token', {
 tokenExpired();
 
 const profile = async (message, _client, args, _db, cache) => {
-  let userId = message.author.id;
+  let userId = '1';
   let mode = (args.length < 2) ? '' : `${args[1]}`;
   if (message.mentions.users.first()) {
     let userData = await cache.getUserData(message.mentions.users.first().id)
-      .catch(console.error);
     userId = userData.osu_profile;
   }
   else if (args.length >= 1) userId = args[0];
+  else {
+    let userData = await cache.getUserData(message.author.id)
+    userId = userData.osu_profile;
+  }
 
   fetch(`https://osu.ppy.sh/api/v2/users/${userId}/${mode}`, {
     method: 'GET',
@@ -82,6 +85,7 @@ const setprofile = (message, _client, args, db, cache) => {
   if (args.length < 1) message.channel.send('Please provide your osu! user ID!')
     .catch(console.error)
   else {
+    message.reply(args[0]);
     fetch(`https://osu.ppy.sh/api/v2/users/${args[0]}`, {
       method: 'GET',
       headers: {
@@ -92,12 +96,14 @@ const setprofile = (message, _client, args, db, cache) => {
     }).then(response => response.json().then(data => {
       if (data.hasOwnProperty('error')) message.channel.send('Invalid user id!')
         .catch(console.error);
-      else db.collection('users').doc(message.author.id).set({
-        osu_profile: args[0]
-      }, { merge: true })
-        .then(cache.cacheUserData(message.author.id))
-        .then(() => message)
-        .catch(console.error);
+      else {
+        db.collection('users').doc(message.author.id).set({
+          osu_profile: args[0]
+        }, { merge: true })
+          .then(cache.cacheUserData(message.author.id))
+          .then(() => message.channel.send(`Successfully set <@${message.author.id}>'s osu! profile to **${data.username} (${args[0]})**.`))
+          .catch(console.error);
+      }
     }));
   }
 }
