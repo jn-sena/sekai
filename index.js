@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const AutoPoster = require('topgg-autoposter');
+const Topgg = require('@top-gg/sdk');
 const admin = require('firebase-admin');
 const path = require('path');
 const fs = require('fs');
@@ -13,7 +13,17 @@ const topggToken = tokensObject.topggToken;
 const firebaseCredentials = tokensObject.firebaseCredentials;
 
 const client = new Discord.Client();
-const ap = AutoPoster(topggToken, client);
+const api = new Topgg.Api(topggToken);
+(function postStats() {
+  api.postStats({
+    serverCount: client.guilds.cache.size,
+    shardId: client.shard.ids[0],
+    shardCount: client.options.shardCount
+  });
+  setTimeout(postStats, 30 * 60 * 1e3);
+})();
+
+
 ap.on('posted', () => console.log(' => Successfully posted bot stats to top.gg.'));
 
 admin.initializeApp({
@@ -59,7 +69,7 @@ client.on('message', async message => {
 
   for (const i of commandModules) if (i[command]) {
     message.channel.startTyping();
-    i[command](message, client, args, db, Cache);
+    i[command](message, client, args, api, db, Cache);
     message.channel.stopTyping(true);
     break;
   }
