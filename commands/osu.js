@@ -28,7 +28,7 @@ const tokenExpired = () => fetch('https://osu.ppy.sh/oauth/token', {
 }));
 tokenExpired();
 
-const profile = async (message, _client, args, _db, cache) => {
+const profile = async (message, _client, args, _api, _db, cache) => {
   let userId = '1';
   let mode = (args.length < 2) ? '' : `${args[1]}`;
   if (message.mentions.users.first()) {
@@ -81,7 +81,7 @@ const profile = async (message, _client, args, _db, cache) => {
   }));
 }
 
-const setprofile = (message, _client, args, db, cache) => {
+const setprofile = (message, _client, args, _api, db, cache) => {
   if (args.length < 1) message.channel.send('Please provide your osu! user ID!')
     .catch(console.error)
   else {
