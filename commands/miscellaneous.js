@@ -6,9 +6,9 @@ const help = (message, client, _args, _db) => message.author.send(new Discord.Me
   .setTitle('Help')
   .setDescription('Hi! This is **Sekai**. I am a multipurpose Discord bot to serve you. よろしくおねがいします！')
   .addFields(
-    {name: 'Usage', value: '`&<command> [options]`', inline: true},
-    {name: 'Example', value: '`&help`', inline: true},
-    {name: 'Commands', value: '**See **`&commands`** for commands!**', inline: true})
+    { name: 'Usage', value: '`&<command> [options]`', inline: true },
+    { name: 'Example', value: '`&help`', inline: true },
+    { name: 'Commands', value: '**See **`&commands`** for commands!**', inline: true })
   .setTimestamp()
   .setFooter(`Requested by: ${message.author.tag}`, message.author.displayAvatarURL()))
   .then(() => message.react('📜'))
@@ -20,8 +20,8 @@ const commands = (message, client, _args, _db) => message.author.send(new Discor
   .setTitle('Commands')
   .setDescription('The following commands are the things I can do.')
   .addFields(
-    {name: 'Miscellaneous', value: '`&help` **=>** Shows the help text.\n\
-`&commands` **=>** Shows this text.', inline: true})
+    { name: 'Miscellaneous', value: '`&help` **=>** Shows the help text.\n\
+`&commands` **=>** Shows this text.', inline: true })
   .setTimestamp()
   .setFooter(`Requested by: ${message.author.tag}`, message.author.displayAvatarURL()))
   .then(() => message.react('📜'))

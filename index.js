@@ -4,7 +4,7 @@ const admin = require('firebase-admin');
 const path = require('path');
 const fs = require('fs');
 
-const {default_guild_doc} = require('./modules/essentials.js');
+const { default_guild_doc } = require('./modules/essentials.js');
 
 // FIXME: Create a file named './tokens.json' and fill it. See README.md.
 const tokensObject = require('./tokens.json');
@@ -24,7 +24,7 @@ const act_types = ['LISTENING', 'WATCHING', 'PLAYING', 'STREAMING', 'COMPETING']
 const setActivity = () => {
     let type = act_types[Math.floor(Math.random() * act_types.length)];
     // Masterpiece by Some1CP on YouTube.
-    client.user.setActivity(`世界 ＊ &help`, {type: type, url: 'https://youtu.be/moZtoMP7HAA'})
+    client.user.setActivity(`世界 ＊ &help`, { type: type, url: 'https://youtu.be/moZtoMP7HAA' })
       .catch(console.error);
 }
 
