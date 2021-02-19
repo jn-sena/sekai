@@ -1,4 +1,4 @@
-const { default_guild_doc, default_user_doc } = require('./essentials.js');
+const { default_guild_doc, default_user_doc } = require('./essentials');
 
 class Cache {
   static db = null;
