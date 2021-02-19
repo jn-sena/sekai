@@ -14,13 +14,10 @@ const firebaseCredentials = tokensObject.firebaseCredentials;
 
 const client = new Discord.Client();
 const api = new Topgg.Api(topggToken);
-(function postStats() {
-  api.postStats({
-    serverCount: client.guilds.cache.size,
-    shardCount: client.options.shardCount
-  });
-  setTimeout(postStats, 30 * 60 * 1e3);
-})();
+setInterval(() => api.postStats({
+  serverCount: client.guilds.cache.size,
+  shardCount: client.options.shardCount
+}), 1800000);
 
 admin.initializeApp({
   credential: admin.credential.cert(firebaseCredentials)
