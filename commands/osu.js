@@ -1,6 +1,11 @@
 const Discord = require('discord.js');
 const fetch = require('node-fetch');
 
+// FIXME: Create a file named './tokens.json' and fill it. See README.md.
+const tokensObject = require('../tokens.json');
+const clientId = tokensObject.osu.clientId;
+const clientSecret = tokensObject.osu.clientSecret;
+
 let accessToken = '';
 const tokenExpired = () => fetch('https://osu.ppy.sh/oauth/token', {
     method: 'post',
@@ -23,11 +28,11 @@ const tokenExpired = () => fetch('https://osu.ppy.sh/oauth/token', {
 }));
 tokenExpired();
 
-const profile = (message, _client, args, db) => {
+const profile = (message, _client, args, _db, cache) => {
 
 }
 
-const setprofile = (message, _client, args, db) => {
+const setprofile = (message, _client, args, db, cache) => {
   if (args.length < 1) message.channel.send('Please provide your osu! user id!')
     .catch(console.error)
   else {
@@ -44,6 +49,7 @@ const setprofile = (message, _client, args, db) => {
       else db.collection('users').doc(message.author.id).set({
         osu_profile: args[0]
       }, { merge: true })
+        .then(cache.cacheUserData(message.author.id))
         .catch(console.error);
     }));
   }
