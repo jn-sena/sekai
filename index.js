@@ -4,7 +4,8 @@ const admin = require('firebase-admin');
 const path = require('path');
 const fs = require('fs');
 
-const {default_guild_doc} = require('./modules/essentials.js');
+const { default_guild_doc } = require('./modules/essentials');
+const Cache = require('./modules/cache');
 
 // FIXME: Create a file named './tokens.json' and fill it. See README.md.
 const tokensObject = require('./tokens.json');
@@ -19,6 +20,7 @@ admin.initializeApp({
   credential: admin.credential.cert(firebaseCredentials)
 });
 const db = admin.firestore();
+Cache.loadDatabase(db);
 
 const act_types = ['LISTENING', 'WATCHING', 'PLAYING', 'STREAMING', 'COMPETING'];
 const setActivity = () => {
@@ -38,20 +40,15 @@ client.on('ready', () => {
   fs.readdirSync(commandsPath).forEach(file => commandModules.push(require(`${commandsPath}/${file}`)));
 });
 
-client.on('guildCreate', guild => db.collection('guilds').doc(guild.id).set(default_guild_doc)
-  .catch(console.error));
+client.on('guildCreate', guild => Cache.cacheGuildData(guild.id).catch(console.error));
 
 client.on('message', async message => {
   if (message.author.bot) return;
 
   let prefix = '&';
-  if (message.guild) prefix = await (() => new Promise(async (resolve, reject) => {
-    let documentSnapshot = await db.collection('guilds').doc(message.guild.id).get();
-    if (!documentSnapshot.exists) db.collection('guilds').doc(message.guild.id).set(default_guild_doc)
-      .catch(reject);
-    else resolve(documentSnapshot.data().prefix);
-  }))()
-    .catch(console.error);
+  if (message.guild) prefix = await (() => new Promise(resolve => Cache.getGuildData(message.guild.id)
+    .then(data => resolve(data.prefix))
+    .catch(console.error)));
   if (!message.content.startsWith(prefix)) return;
 
   let command = message.content.replace(prefix, '').split(/ +/g)[0].toLowerCase();
@@ -60,7 +57,7 @@ client.on('message', async message => {
 
   for (const i of commandModules) if (i[command]) {
     message.channel.startTyping();
-    i[command](message, client, args, db);
+    i[command](message, client, args, db, Cache);
     break;
   }
 });
