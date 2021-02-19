@@ -23,8 +23,8 @@ const db = admin.firestore();
 const act_types = ['LISTENING', 'WATCHING', 'PLAYING', 'STREAMING', 'COMPETING'];
 const setActivity = () => {
     let type = act_types[Math.floor(Math.random() * act_types.length)];
-    // Masterpiece by Snazz on YouTube.
-    client.user.setActivity(`世界 ＊ &help`, {type: type, url: 'https://youtu.be/K0MDWjelrgY'})
+    // Masterpiece by Some1CP on YouTube.
+    client.user.setActivity(`世界 ＊ &help`, {type: type, url: 'https://youtu.be/moZtoMP7HAA'})
       .catch(console.error);
 }
 
