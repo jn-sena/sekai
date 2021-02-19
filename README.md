@@ -66,7 +66,7 @@ $ npm i
   },
   "osu": {
     "clientId": 0,
-    "clientSecret": "osu! API Client Secret",
+    "clientSecret": "osu! API Client Secret"
   }
 }
 ```

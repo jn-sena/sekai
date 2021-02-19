@@ -6,13 +6,13 @@ class Cache {
   static userDataCaches = {};
 
   static loadDatabase(database) {
-    db = database;
+    this.db = database;
   }
 
   static cacheGuildData(guildId) {
     return new Promise(async (resolve, reject) => {
-      let documentSnapshot = await db.collection('guilds').doc(guildId).get();
-      if (!documentSnapshot.exists) db.collection('guilds').doc(guildId).set(default_guild_doc)
+      let documentSnapshot = await this.db.collection('guilds').doc(guildId).get();
+      if (!documentSnapshot.exists) this.db.collection('guilds').doc(guildId).set(default_guild_doc)
         .then(() => {
           this.guildDataCaches[guildId] = default_guild_doc;
           resolve(default_guild_doc)
@@ -28,8 +28,8 @@ class Cache {
 
   static cacheUserData(userId) {
     return new Promise(async (resolve, reject) => {
-      let documentSnapshot = await db.collection('users').doc(userId).get();
-      if (!documentSnapshot.exists) db.collection('users').doc(userId).set(default_user_doc)
+      let documentSnapshot = await this.db.collection('users').doc(userId).get();
+      if (!documentSnapshot.exists) this.db.collection('users').doc(userId).set(default_user_doc)
         .then(() => {
           this.userDataCaches[userId] = default_user_doc;
           resolve(default_user_doc)
@@ -47,8 +47,8 @@ class Cache {
     return new Promise(async (resolve, reject) => {
       if (this.guildDataCaches.hasOwnProperty(guildId)) resolve(this.guildDataCaches[guildId]);
       else {
-        let documentSnapshot = await db.collection('guilds').doc(guildId).get();
-        if (!documentSnapshot.exists) db.collection('guilds').doc(guildId).set(default_guild_doc)
+        let documentSnapshot = await this.db.collection('guilds').doc(guildId).get();
+        if (!documentSnapshot.exists) this.db.collection('guilds').doc(guildId).set(default_guild_doc)
           .then(() => {
             this.guildDataCaches[guildId] = default_guild_doc;
             resolve(default_guild_doc)
@@ -67,8 +67,8 @@ class Cache {
     return new Promise(async (resolve, reject) => {
       if (this.userDataCaches.hasOwnProperty(userId)) resolve(this.userDataCaches[userId]);
       else {
-        let documentSnapshot = await db.collection('users').doc(userId).get();
-        if (!documentSnapshot.exists) db.collection('users').doc(userId).set(default_user_doc)
+        let documentSnapshot = await this.db.collection('users').doc(userId).get();
+        if (!documentSnapshot.exists) this.db.collection('users').doc(userId).set(default_user_doc)
           .then(() => {
             this.userDataCaches[userId] = default_user_doc;
             resolve(default_user_doc)
