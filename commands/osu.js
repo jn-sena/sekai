@@ -20,7 +20,7 @@ const tokenExpired = () => fetch('https://osu.ppy.sh/oauth/token', {
       'scope': 'public'
     })
 }).then(response => response.json().then(data => {
-  if (Object.keys(data).includes('error')) console.error('Invalid osu! clientId or clientSecret!');
+  if (data.hasOwnProperty('error')) console.error('Invalid osu! clientId or clientSecret!');
   else {
     accessToken = data.access_token;
     setTimeout(tokenExpired, data.expires_in * 1e3 - 500e3);
