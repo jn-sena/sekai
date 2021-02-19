@@ -14,6 +14,7 @@ const firebaseCredentials = tokensObject.firebaseCredentials;
 
 const client = new Discord.Client();
 const ap = AutoPoster(topggToken, client);
+ap.on('posted', () => console.log(' => Successfully posted bot stats to top.gg.'));
 
 admin.initializeApp({
   credential: admin.credential.cert(firebaseCredentials)
@@ -32,6 +33,7 @@ const setActivity = () => {
 let commandModules = [];
 
 client.on('ready', () => {
+  console.log(' => Bot authenticated successfully.');
   setActivity();
   setInterval(setActivity, 600e3);
 
