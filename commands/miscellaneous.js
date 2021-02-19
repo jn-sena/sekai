@@ -42,7 +42,7 @@ const commands = (message, client, _args, _api, _db, _cache) => {
     .catch(console.error));
 }
 
-const info = (message, client, _args, api, _db, _cache) => api.getStats(client.id)
+const info = (message, client, _args, api, _db, _cache) => api.getStats(client.user.id)
   .then(stats => message.channel.send(new Discord.MessageEmbed()
     .setColor('#85dbfc')
     .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
@@ -75,7 +75,9 @@ const user = (message, client, _args, api, _db, cache) => {
         if (message.author == iuser) embed.addField('User Latency', `**${Date.now() - message.createdTimestamp}** ms`, true);
         embed.addFields(
           { name: 'Voted', value: `${voted ? 'Yes' : 'No'}`, inline: true },
-          { name: 'osu! ID', value: `${data.osu_profile ? data.osu_profile : 'Not Provided'}`, inline: true})
+          { name: 'osu! ID', value: `${data.osu_profile ? data.osu_profile : 'Not Provided'}`, inline: true});
+        message.channel.send(embed)
+          .catch(console.error);
       })
       .catch(console.error))
     .catch(console.error);
