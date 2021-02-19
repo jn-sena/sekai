@@ -4,7 +4,9 @@ const admin = require('firebase-admin');
 const path = require('path');
 const fs = require('fs');
 
-// FIXME: Create a file named './tokens.json' and fill it. See README.md
+const {default_guild_doc} = require('./modules/essentials.js');
+
+// FIXME: Create a file named './tokens.json' and fill it. See README.md.
 const tokensObject = require('./tokens.json');
 const clientToken = tokensObject.clientToken;
 const topggToken = tokensObject.topggToken;
@@ -36,10 +38,20 @@ client.on('ready', () => {
   fs.readdirSync(commandsPath).forEach(file => commandModules.push(require(`${commandsPath}/${file}`)));
 });
 
-client.on('message', message => {
+client.on('guildCreate', guild => db.collection('guilds').doc(guild.id).set(default_guild_doc)
+  .catch(console.error));
+
+client.on('message', async message => {
   if (message.author.bot) return;
 
   let prefix = '&';
+  if (message.guild) prefix = await (() => new Promise(async (resolve, reject) => {
+    let documentSnapshot = await db.collection('guilds').doc(message.guild.id).get();
+    if (!documentSnapshot.exists) db.collection('guilds').doc(message.guild.id).set(default_guild_doc)
+      .catch(reject);
+    else resolve(documentSnapshot.data().prefix);
+  }))()
+    .catch(console.error);
   if (!message.content.startsWith(prefix)) return;
 
   let command = message.content.replace(prefix, '').split(/ +/g)[0].toLowerCase();
