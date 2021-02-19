@@ -17,7 +17,6 @@ const api = new Topgg.Api(topggToken);
 (function postStats() {
   api.postStats({
     serverCount: client.guilds.cache.size,
-    shardId: client.shard.ids[0],
     shardCount: client.options.shardCount
   });
   setTimeout(postStats, 30 * 60 * 1e3);
