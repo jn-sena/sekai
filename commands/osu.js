@@ -72,6 +72,7 @@ const profile = async (message, _client, args, _api, _db, cache) => {
   **Supporter:** \`${data.is_supporter ? 'Supporter' : 'Not Supporter'}\`\n\
   **Online:** \`${data.is_online ? 'Online' : 'Offline'}\`\n\
   **Active:** \`${data.is_active ? 'Active' : 'Not Active'}\`\n\
+  **Occupation:** \`${data.occupation ? data.occupation : 'Not provided.'}\`\n\
   **Interests:** \`${data.interests ? data.interests : 'Not provided.'}\`\n\
   **Joined At:** \`${joinedStr}\``, inline: false})
         .setTimestamp()
