@@ -83,6 +83,19 @@ const user = (message, client, _args, api, _db, cache) => {
     .catch(console.error);
 }
 
+const avatar = (message, client, _args, _api, _db, _cache) => {
+  let user = message.author;
+  if (message.mentions.users.first()) user = message.mentions.users.first();
+  message.channel.send(new Discord.MessageEmbed()
+    .setColor('#85dbfc')
+    .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
+    .setTitle(`${user.tag}'s Avatar`)
+    .setImage(user.displayAvatarURL())
+    .setTimestamp()
+    .setFooter(`Requested by: ${message.author.tag}`, message.author.displayAvatarURL()))
+    .catch(console.error);
+}
+
 const server = guild = (message, client, _args, _api, _db, cache) => {
   if (!message.guild) message.channel.send('This command can only be run in a server!')
     .catch(console.error);
@@ -102,19 +115,6 @@ const server = guild = (message, client, _args, _api, _db, cache) => {
     .catch(console.error);
 }
 
-const avatar = (message, client, _args, _api, _db, _cache) => {
-  let user = message.author;
-  if (message.mentions.users.first()) user = message.mentions.users.first();
-  message.channel.send(new Discord.MessageEmbed()
-    .setColor('#85dbfc')
-    .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
-    .setTitle(`${user.tag}'s Avatar`)
-    .setImage(user.displayAvatarURL())
-    .setTimestamp()
-    .setFooter(`Requested by: ${message.author.tag}`, message.author.displayAvatarURL()))
-    .catch(console.error);
-}
-
 const vote = (message, client, _args, api, _db, _cache) => api.hasVoted(message.author.id)
   .then(voted => message.channel.send(new Discord.MessageEmbed()
     .setColor('#85dbfc')
@@ -129,9 +129,22 @@ const vote = (message, client, _args, api, _db, _cache) => api.hasVoted(message.
     .catch(console.error))
   .catch(console.error);
 
+const invite = (message, client, _args, api, _db, _cache) => api.getStats(client.user.id)
+  .then(stats => message.channel.send(new Discord.MessageEmbed()
+    .setColor('#85dbfc')
+    .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
+    .setTitle('Invite Sekai to your Server')
+    .addFields(
+      { name: 'Invite Link', value: `https://top.gg/bot/772460495949135893/invite`, inline: true },
+      { name: 'Server Count', value: `**${stats.serverCount}** Servers`, inline: true })
+    .setTimestamp()
+    .setFooter(`Requested by: ${message.author.tag}`, message.author.displayAvatarURL()))
+    .catch(console.error))
+  .catch(console.error)
+
 module.exports = {
   help, commands,
-  info, user,
+  info, user, avatar,
   guild, server,
-  avatar, vote
+  vote, invite
 };
