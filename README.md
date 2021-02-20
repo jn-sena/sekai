@@ -45,7 +45,7 @@ $ cd sekai
 $ npm i
 ```
 
-* Create a file named `tokens.json` in the directory and fill in like this.
+* Create a file named `tokens.json` in the directory and fill in like following.
 * You can download the `firebaseCredentials` from Firebase as a JSON file.
 
 ```json
@@ -70,6 +70,8 @@ $ npm i
   }
 }
 ```
+
+You can start the bot with the following command.
 
 ```bash
 $ npm start
