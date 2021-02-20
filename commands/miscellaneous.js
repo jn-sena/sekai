@@ -35,7 +35,7 @@ const commands = (message, client, _args, _api, _db, _cache) => {
       { name: 'osu!', value: '`&profile <osuUserId | @user>` **=>** Shows osu! profile of user.\n\
 `&setprofile <osuUserId>` **=>** Sets the osu! user ID of yourself in Sekai database.', inline: true },
       { name: 'Administration', value: '`&prefix <prefix>` **=>** Sets the prefix for current server.\n\
-`&autorole <@&role>` **=>** Toggles autorole for role in current server.', inline: true })
+`&autorole <@&role>` **=>** Toggles autorole for role in current server. Role should be lower than Sekai role.', inline: true })
     .setTimestamp()
     .setFooter(`Requested by: ${message.author.tag}`, message.author.displayAvatarURL());
   message.author.send(embed)

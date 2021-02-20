@@ -14,7 +14,7 @@ const prefix = (message, _client, args, _api, db, cache) => {
     .catch(console.error);
 }
 
-const autorole = (message, _client, args, _api, db, cache) => {
+const autorole = (message, _client, _args, _api, db, cache) => {
   if (!message.guild) message.channel.send('This command can only be run in a server!')
     .catch(console.error);
   else if (!message.member.hasPermission('MANAGE_ROLES')) message.channel.send('You need `Manage Roles` permission to run this command!')
