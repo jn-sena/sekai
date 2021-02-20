@@ -33,7 +33,9 @@ const commands = (message, client, _args, _api, _db, _cache) => {
 `&avatar [@user]` **=>** Shows the avatar of the user.\n\
 `&vote` **=>** Shows the vote link and status.', inline: true },
       { name: 'osu!', value: '`&profile <osuUserId | @user>` **=>** Shows osu! profile of user.\n\
-`&setprofile <osuUserId>` **=>** Sets the osu! user ID of yourself in Sekai database.', inline: true })
+`&setprofile <osuUserId>` **=>** Sets the osu! user ID of yourself in Sekai database.', inline: true },
+      { name: 'Administration', value: '`&prefix <prefix>` **=>** Sets the prefix for current server.\n\
+`&autorole <@&role>` **=>** Toggles autorole for role in current server.', inline: true })
     .setTimestamp()
     .setFooter(`Requested by: ${message.author.tag}`, message.author.displayAvatarURL());
   message.author.send(embed)
