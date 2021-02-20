@@ -70,7 +70,7 @@ client.on('message', async message => {
 
 client.on('guildMemberAdd', member => Cache.getGuildData(member.guild.id)
   .then(data => {
-    if (data.autoroles.length >= 1) data.autoroles.forEach(element => member.roles.add(member.guild.roles.cache.get(data.autoroles[element]))
+    if (data.autoroles.length >= 1) data.autoroles.forEach(element => member.roles.add(member.guild.roles.cache.get(element))
       .catch(console.error));
   })
   .catch(console.error));
