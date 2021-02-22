@@ -50,6 +50,7 @@ $ npm i
 
 ```json
 {
+  "nightly": false,
   "clientToken": "Client Token",
   "topggToken": "top.gg API Token",
   "firebaseCredentials": {

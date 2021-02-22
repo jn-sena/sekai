@@ -14,7 +14,7 @@ const firebaseCredentials = tokensObject.firebaseCredentials;
 
 const client = new Discord.Client();
 const api = new Topgg.Api(topggToken);
-setInterval(() => api.postStats({
+if (!tokensObject.nightly) setInterval(() => api.postStats({
   serverCount: client.guilds.cache.size,
   shardCount: client.options.shardCount
 }), 30 * 60 * 1e3);
