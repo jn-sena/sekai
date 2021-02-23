@@ -137,7 +137,8 @@ const invite = (message, client, _args, api, _db, _cache) => api.getStats(client
     .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
     .setTitle('Invite Sekai to your Server')
     .addFields(
-      { name: 'Invite Link', value: `https://top.gg/bot/772460495949135893/invite`, inline: true },
+      { name: 'Bot Invite', value: 'https://top.gg/bot/772460495949135893/invite', inline: true },
+      { name: 'Support Server Invite', value: 'https://discord.com/invite/sfwuVnTFJ2', inline: true},
       { name: 'Server Count', value: `**${stats.serverCount}** Servers`, inline: true })
     .setTimestamp()
     .setFooter(`Requested by: ${message.author.tag}`, message.author.displayAvatarURL()))
