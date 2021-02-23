@@ -77,6 +77,27 @@ class Cache {
     });
   }
 
+  /*
+  static cacheModerationCases(guildId) {
+    return new Promise((resolve, reject) => db.collection('guilds').doc(guildId).collection('cases').get()
+      .then(querySnapshot => {
+        if (!this.moderationCaseCaches[guildId]) this.moderationCaseCaches[guildId] = {};
+        if (!querySnapshot.empty) querySnapshot.forEach(documentSnapshot => {
+          let data = documentSnapshot.data();
+          this.moderationCaseCaches[guildId][documentSnapshot.id] = data;
+        });
+        resolve(this.moderationCaseCaches[guildId]);
+      })
+      .catch(reject));
+  }*/
+
+  static getModerationCases(guildId) {
+    return new Promise(resolve => {
+      if (!this.moderationCaseCaches[guildId]) this.moderationCaseCaches[guildId] = {};
+      resolve(this.moderationCaseCaches[guildId]);
+    });
+  }
+
   static getUserData(userId) {
     return new Promise(async (resolve, reject) => {
       if (this.userDataCaches.hasOwnProperty(userId)) resolve(this.userDataCaches[userId]);
