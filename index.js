@@ -52,6 +52,7 @@ client.on('message', async message => {
   let prefix = '&';
   if (message.guild) {
     let guildData = await Cache.getGuildData(message.guild.id);
+    await Cache.cacheModerationCases(message.guild.id);
     prefix = guildData.prefix;
   }
   if (!message.content.startsWith(prefix)) return;

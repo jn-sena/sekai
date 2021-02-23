@@ -4,6 +4,7 @@ class Cache {
   static db = null;
   static guildDataCaches = {};
   static userDataCaches = {};
+  static moderationCaseCaches = {};
 
   static loadDatabase(database) {
     this.db = database;
@@ -24,6 +25,19 @@ class Cache {
         resolve(data);
       }
     });
+  }
+
+  static cacheModerationCases(guildId) {
+    return new Promise((resolve, reject) => db.collection('guilds').doc(guildId).collection('cases').get()
+      .then(querySnapshot => {
+        if (!this.moderationCaseCaches[guildId]) this.moderationCaseCaches[guildId] = {};
+        if (!querySnapshot.empty) querySnapshot.forEach(documentSnapshot => {
+          let data = documentSnapshot.data();
+          this.moderationCaseCaches[guildId][documentSnapshot.id] = data;
+        });
+        resolve(this.moderationCaseCaches[guildId]);
+      })
+      .catch(reject));
   }
 
   static cacheUserData(userId) {
