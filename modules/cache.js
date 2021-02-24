@@ -81,9 +81,18 @@ class Cache {
   }
 
   static getModerationCases(guildId) {
-    return new Promise(resolve => {
-      if (!this.moderationCaseCaches[guildId]) this.moderationCaseCaches[guildId] = {};
-      resolve(this.moderationCaseCaches[guildId]);
+    return new Promise((resolve, reject) => {
+      if (!this.moderationCaseCaches[guildId]) db.collection('guilds').doc(guildId).collection('cases').get()
+        .then(querySnapshot => {
+          if (!this.moderationCaseCaches[guildId]) this.moderationCaseCaches[guildId] = {};
+          if (!querySnapshot.empty) querySnapshot.forEach(documentSnapshot => {
+            let data = documentSnapshot.data();
+            this.moderationCaseCaches[guildId][documentSnapshot.id] = data;
+          })
+          resolve(this.moderationCaseCaches[guildId]);
+        })
+        .catch(reject);
+      else resolve({});
     });
   }
 
