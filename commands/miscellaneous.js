@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
+const Cache = require('../modules/cache');
 
-const help = (message, client, _args, _api, _db, _cache) => {
+const help = (message, client, _args, _api, _db) => {
   let embed = new Discord.MessageEmbed()
     .setColor('#85dbfc')
     .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
@@ -18,7 +19,7 @@ const help = (message, client, _args, _api, _db, _cache) => {
     .catch(console.error));
 }
 
-const commands = (message, client, _args, _api, _db, _cache) => {
+const commands = (message, client, _args, _api, _db) => {
   let embed = new Discord.MessageEmbed()
     .setColor('#85dbfc')
     .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
@@ -44,7 +45,7 @@ const commands = (message, client, _args, _api, _db, _cache) => {
     .catch(console.error));
 }
 
-const info = (message, client, _args, api, _db, _cache) => api.getStats(client.user.id)
+const info = (message, client, _args, api, _db) => api.getStats(client.user.id)
   .then(stats => message.channel.send(new Discord.MessageEmbed()
     .setColor('#85dbfc')
     .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
@@ -58,10 +59,10 @@ const info = (message, client, _args, api, _db, _cache) => api.getStats(client.u
     .catch(console.error))
   .catch(console.error);
 
-const user = (message, client, _args, api, _db, cache) => {
+const user = (message, client, _args, api, _db) => {
   let iuser = message.author;
   if (message.mentions.users.first()) iuser = message.mentions.users.first();
-  cache.getUserData(iuser.id)
+  Cache.getUserData(iuser.id)
     .then(data => api.hasVoted(iuser.id)
       .then(voted => {
         let embed = new Discord.MessageEmbed()
@@ -85,7 +86,7 @@ const user = (message, client, _args, api, _db, cache) => {
     .catch(console.error);
 }
 
-const avatar = (message, client, _args, _api, _db, _cache) => {
+const avatar = (message, client, _args, _api, _db) => {
   let user = message.author;
   if (message.mentions.users.first()) user = message.mentions.users.first();
   message.channel.send(new Discord.MessageEmbed()
@@ -98,10 +99,10 @@ const avatar = (message, client, _args, _api, _db, _cache) => {
     .catch(console.error);
 }
 
-const server = guild = (message, client, _args, _api, _db, cache) => {
+const server = guild = (message, client, _args, _api, _db) => {
   if (!message.guild) message.channel.send('This command can only be run in a server!')
     .catch(console.error);
-  else cache.getGuildData(message.guild.id)
+  else Cache.getGuildData(message.guild.id)
     .then(data => message.channel.send(new Discord.MessageEmbed()
       .setColor('#85dbfc')
       .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
@@ -117,7 +118,7 @@ const server = guild = (message, client, _args, _api, _db, cache) => {
     .catch(console.error);
 }
 
-const vote = (message, client, _args, api, _db, _cache) => api.hasVoted(message.author.id)
+const vote = (message, client, _args, api, _db) => api.hasVoted(message.author.id)
   .then(voted => message.channel.send(new Discord.MessageEmbed()
     .setColor('#85dbfc')
     .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
@@ -131,7 +132,7 @@ const vote = (message, client, _args, api, _db, _cache) => api.hasVoted(message.
     .catch(console.error))
   .catch(console.error);
 
-const invite = (message, client, _args, api, _db, _cache) => api.getStats(client.user.id)
+const invite = (message, client, _args, api, _db) => api.getStats(client.user.id)
   .then(stats => message.channel.send(new Discord.MessageEmbed()
     .setColor('#85dbfc')
     .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')

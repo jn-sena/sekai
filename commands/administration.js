@@ -1,4 +1,6 @@
-const prefix = (message, _client, args, _api, db, cache) => {
+const Cache = require('../modules/cache');
+
+const prefix = (message, _client, args, _api, db) => {
   if (!message.guild) message.channel.send('This command can only be run in a server!')
     .catch(console.error);
   else if (!message.member.hasPermission('MANAGE_MESSAGES')) message.channel.send('You need `Manage Messages` permission to run this command!')
@@ -8,20 +10,20 @@ const prefix = (message, _client, args, _api, db, cache) => {
   else db.collection('guilds').doc(message.guild.id).set({
     prefix: args[0]
   }, { merge: true })
-    .then(() => cache.cacheGuildData(message.guild.id))
+    .then(() => Cache.cacheGuildData(message.guild.id))
     .then(() => message.channel.send(`Successfully set server prefix as \`${args[0]}\`.`)
       .catch(console.error))
     .catch(console.error);
 }
 
-const autorole = (message, _client, _args, _api, db, cache) => {
+const autorole = (message, _client, _args, _api, db) => {
   if (!message.guild) message.channel.send('This command can only be run in a server!')
     .catch(console.error);
   else if (!message.member.hasPermission('MANAGE_ROLES')) message.channel.send('You need `Manage Roles` permission to run this command!')
     .catch(console.error);
   else if (!message.mentions.roles.first()) message.channel.send('Please mention a role!')
     .catch(console.error);
-  else cache.getGuildData(message.guild.id)
+  else Cache.getGuildData(message.guild.id)
     .then(data => {
       let roles = data.autoroles;
       let addition = true;
@@ -33,7 +35,7 @@ const autorole = (message, _client, _args, _api, db, cache) => {
       db.collection('guilds').doc(message.guild.id).set({
         autoroles: roles
       }, { merge: true })
-        .then(() => cache.cacheGuildData(message.guild.id))
+        .then(() => Cache.cacheGuildData(message.guild.id))
         .then(() => message.channel.send(`Successfully ${addition ? 'added' : 'removed'} <@&${message.mentions.roles.first().id}> ${addition ? 'to': 'from'} autoroles.`)
           .catch(console.error))
         .catch(console.error);

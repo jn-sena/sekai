@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Cache = require('../modules/cache');
 const fetch = require('node-fetch');
 
 // FIXME: Create a file named './tokens.json' and fill it. See README.md.
@@ -28,16 +29,16 @@ const tokenExpired = () => fetch('https://osu.ppy.sh/oauth/token', {
 }));
 tokenExpired();
 
-const profile = async (message, _client, args, _api, _db, cache) => {
+const profile = async (message, _client, args, _api, _db) => {
   let userId = '1';
   let mode = (args.length < 2) ? '' : `${args[1]}`;
   if (message.mentions.users.first()) {
-    let userData = await cache.getUserData(message.mentions.users.first().id)
+    let userData = await Cache.getUserData(message.mentions.users.first().id)
     userId = userData.osu_profile;
   }
   else if (args.length >= 1) userId = args[0];
   else {
-    let userData = await cache.getUserData(message.author.id)
+    let userData = await Cache.getUserData(message.author.id)
     userId = userData.osu_profile;
   }
 
@@ -82,7 +83,7 @@ const profile = async (message, _client, args, _api, _db, cache) => {
   }));
 }
 
-const setprofile = (message, _client, args, _api, db, cache) => {
+const setprofile = (message, _client, args, _api, db) => {
   if (args.length < 1) message.channel.send('Please provide your osu! user ID!')
     .catch(console.error)
   else {
@@ -101,7 +102,7 @@ const setprofile = (message, _client, args, _api, db, cache) => {
         db.collection('users').doc(message.author.id).set({
           osu_profile: args[0]
         }, { merge: true })
-          .then(cache.cacheUserData(message.author.id))
+          .then(Cache.cacheUserData(message.author.id))
           .then(() => message.channel.send(`Successfully set <@${message.author.id}>'s osu! profile to **${data.username} (${args[0]})**.`))
           .catch(console.error);
       }
