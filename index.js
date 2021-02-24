@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 
 const Cache = require('./modules/cache');
+const Logger = require('./modules/logger');
 
 // FIXME: Create a file named './tokens.json' and fill it. See README.md.
 const tokensObject = require('./tokens.json');
@@ -24,6 +25,8 @@ admin.initializeApp({
 });
 const db = admin.firestore();
 Cache.loadDatabase(db);
+Logger.loadCache(Cache);
+Logger.loadDatabase(db);
 
 const act_types = ['LISTENING', 'WATCHING', 'PLAYING', 'STREAMING', 'COMPETING'];
 const setActivity = () => {
@@ -63,7 +66,7 @@ client.on('message', async message => {
 
   for (const i of commandModules) if (i[command]) {
     message.channel.startTyping();
-    i[command](message, client, args, api, db, Cache);
+    i[command](message, client, args, api, db);
     message.channel.stopTyping(true);
     break;
   }
