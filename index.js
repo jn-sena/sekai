@@ -18,7 +18,7 @@ const api = new Topgg.Api(topggToken);
 if (!tokensObject.nightly) setInterval(() => api.postStats({
   serverCount: client.guilds.cache.size,
   shardCount: client.options.shardCount
-}), 30 * 60 * 1e3);
+}), 30 * 60e3);
 
 admin.initializeApp({
   credential: admin.credential.cert(firebaseCredentials)
