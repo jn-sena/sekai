@@ -72,6 +72,7 @@ $ npm i
 ```json
 {
   "nightly": false,
+  "nightlyServer": "Server ID that Nightly is in if Present",
   "clientToken": "Client Token",
   "topggToken": "top.gg API Token",
   "firebaseCredentials": {

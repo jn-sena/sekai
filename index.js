@@ -32,7 +32,7 @@ const act_types = ['LISTENING', 'WATCHING', 'PLAYING', 'STREAMING', 'COMPETING']
 const setActivity = () => {
     let type = act_types[Math.floor(Math.random() * act_types.length)];
     // Masterpiece by Some1CP on YouTube.
-    client.user.setActivity(`世界 ＊ &help`, { type: type, url: 'https://youtu.be/moZtoMP7HAA' })
+    client.user.setActivity(`世界 ＊ /help`, { type: type, url: 'https://youtu.be/moZtoMP7HAA' })
       .catch(console.error);
 }
 
@@ -45,32 +45,27 @@ client.on('ready', () => {
 
   let commandsPath = path.join(`${__dirname}/commands`);
   fs.readdirSync(commandsPath).forEach(file => commandModules.push(require(`${commandsPath}/${file}`)));
+  commandModules.forEach(module => Object.keys(module).forEach(command => {
+    if (!tokensObject.nightly) client.api.applications(client.user.id).commands.post({
+      data: module[command].data
+    });
+    else client.api.applications(client.user.id).guilds(tokensObject.nightlyServer).commands.post({
+      data: module[command].data
+    });
+  }));
+
+  client.ws.on('INTERACTION_CREATE', interaction => {
+    const command = interaction.data.name.toLowerCase();
+    const args = interaction.data.options;
+
+    for (const i of commandModules) if (i[command]) {
+      i[command].exec(interaction, client, args, api, db);
+      break;
+    }
+  });
 });
 
 client.on('guildCreate', guild => Cache.cacheGuildData(guild.id).catch(console.error));
-
-client.on('message', async message => {
-  if (message.author.bot) return;
-
-  let prefix = '&';
-  if (message.guild) {
-    let guildData = await Cache.getGuildData(message.guild.id);
-    await Cache.cacheModerationCases(message.guild.id);
-    prefix = guildData.prefix;
-  }
-  if (!message.content.startsWith(prefix)) return;
-
-  let command = message.content.replace(prefix, '').split(/ +/g)[0].toLowerCase();
-  let args = message.content.split(/ +/g);
-  args.splice(args.indexOf(`${prefix}${command}`), 1);
-
-  for (const i of commandModules) if (i[command]) {
-    message.channel.startTyping();
-    i[command](message, client, args, api, db);
-    message.channel.stopTyping(true);
-    break;
-  }
-});
 
 client.on('guildMemberAdd', member => Cache.getGuildData(member.guild.id)
   .then(data => {
