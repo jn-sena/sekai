@@ -87,7 +87,6 @@ const setprofile = (message, _client, args, _api, db) => {
   if (args.length < 1) message.channel.send('Please provide your osu! user ID!')
     .catch(console.error)
   else {
-    message.reply(args[0]);
     fetch(`https://osu.ppy.sh/api/v2/users/${args[0]}`, {
       method: 'GET',
       headers: {
