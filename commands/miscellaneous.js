@@ -5,49 +5,20 @@ const help = {
   data: {
     name: 'help',
     description: 'Shows the help text for Sekai.',
-    options: [{
-      name: 'scope',
-      description: 'The scope of the help text.',
-      type: 3,
-      required: false,
-      choices: [{
-        name: 'General',
-        value: 'help'
-      }, {
-        name: 'Command List',
-        value: 'commands'
-      }]
-    }]
   },
-  exec: (interaction, client, args, _api, _db) => {
-    let scope = 'help'
-    if (args) scope = args[0].value;
+  exec: (interaction, client, _args, _api, _db) => {
     let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
-
     let embed = new Discord.MessageEmbed()
       .setColor('#85dbfc')
       .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
-      .setTitle(`Sekai Help | ${scope === 'help' ? 'General' : 'Commands'}`)
+      .setTitle('Sekai Help')
       .setDescription('Hi! This is **Sekai**. I am a multipurpose Discord bot to serve you. よろしくおねがいします！')
-      .setTimestamp()
-      .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
-    if (scope === 'help') embed.addFields(
+      .addFields(
       { name: 'Usage', value: '`/<command> [options]`', inline: true },
       { name: 'Example', value: '`/help`', inline: false },
-      { name: 'Commands', value: '**See **`/help scope:Commands List`** for commands!**', inline: true });
-    else if (scope === 'commands') embed.addFields(
-      { name: 'Miscellaneous', value: '**/help** `[scope]`\n\
-=> Shows the help text for Sekai.\n\
-=> Scope can be one of these: `Help`, `Command List`.\n\
-\n\
-**/info user** `[@user]`\n\
-=> Shows information about the user.\n\
-\n\
-**/info server**\n\
-=> Shows information about the current server.\n\
-\n\
-**/info bot**\n\
-=> Shows information about Sekai.', inline: true });
+      { name: 'Commands', value: '**See **`/commands** for commands!**', inline: true })
+      .setTimestamp()
+      .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL())
 
     if (author) author.send(embed)
       .catch(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
@@ -60,6 +31,58 @@ const help = {
         }
       }})
       .catch(console.error));
+  }
+};
+
+const commands = {
+  data: {
+    name: 'commands',
+    description: 'Show information about commands.',
+    options: [{
+      name: 'command',
+      description: 'The command to show information about.',
+      type: 3,
+      required: false
+    }]
+  }, exec: (interaction, client, args, _api, _db) => {
+    let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
+    let embed = new Discord.MessageEmbed()
+      .setColor('#85dbfc')
+      .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
+      .setTitle('Sekai Commands')
+      .setDescription('Hi! This is **Sekai**. I am a multipurpose Discord bot to serve you. よろしくおねがいします！')
+      .addFields(
+        { name: 'Miscellaneous', value: '**/help**\n\
+=> Shows the help text for Sekai.\n\
+\n\
+**/commands** `[command]`\n\
+=> Shows the list of commands.\n\
+=> Shows information about the command if given.\n\
+\n\
+**/info user** `[@user]`\n\
+=> Shows information about the user.\n\
+\n\
+**/info server**\n\
+=> Shows information about the current server.\n\
+\n\
+**/info bot**\n\
+=> Shows information about Sekai.', inline: true })
+      .setTimestamp()
+      .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
+
+    if (!args && author) author.send(embed)
+      .catch(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+        type: 4,
+        data: {
+          tts: false,
+          content: '',
+          embeds: [embed],
+          allowed_mentions: []
+        }
+      }})
+      .catch(console.error));
+    if (!args)
+    ;
   }
 };
 
@@ -107,7 +130,7 @@ const info = {
                 { name: 'Discord Join Timestamp', value: user.createdAt.toUTCString(), inline: false})
               .setTimestamp()
               .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
-            if (interaction.guild_id && author == user) embed.addField('Server Join Timestamp', guild.member(user).joinedAt.toUTCString(), false);
+            if (interaction.guild_id && author === user) embed.addField('Server Join Timestamp', guild.member(user).joinedAt.toUTCString(), false);
             embed.addFields(
               { name: 'Voted', value: `${voted ? 'Yes' : 'No'}`, inline: true },
               { name: 'osu! ID', value: `${data.osu_profile ? data.osu_profile : 'Not Provided'}`, inline: true});
@@ -176,5 +199,5 @@ const info = {
 };
 
 module.exports = {
-  help, info
+  help, commands, info
 };
