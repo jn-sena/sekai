@@ -74,6 +74,7 @@ $ npm i
   "nightly": false,
   "nightlyServer": "Server ID that Nightly is in if Present",
   "clientToken": "Client Token",
+  "clientId": "Client ID to Use with APIs.",
   "topggToken": "top.gg API Token",
   "firebaseCredentials": {
     "type": "service_account",

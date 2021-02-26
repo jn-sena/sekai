@@ -1,12 +1,15 @@
 const Discord = require('discord.js');
 const Cache = require('../modules/cache');
 
+// FIXME: Create a file named './tokens.json' and fill it. See README.md.
+const tokensObject = require('../tokens.json');
+const clientId = tokensObject.clientId;
+
 const help = {
   data: {
     name: 'help',
     description: 'Shows the help text for Sekai.',
-  },
-  exec: (interaction, client, _args, _api, _db) => {
+  }, exec: (interaction, client, _args, _api, _db) => {
     let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
     let embed = new Discord.MessageEmbed()
       .setColor('#85dbfc')
@@ -18,7 +21,7 @@ const help = {
       { name: 'Example', value: '`/help`', inline: false },
       { name: 'Commands', value: '**See **`/commands** for commands!**', inline: true })
       .setTimestamp()
-      .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL())
+      .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
 
     if (author) author.send(embed)
       .catch(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
@@ -66,7 +69,13 @@ const commands = {
 => Shows information about the current server.\n\
 \n\
 **/info bot**\n\
-=> Shows information about Sekai.', inline: true })
+=> Shows information about Sekai.\n\
+\n\
+**/invite**\n\
+=> Shows invite links of Sekai.\n\
+\n\
+**/vote**\n\
+=> Shows vote link of Sekai.', inline: true })
       .setTimestamp()
       .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
 
@@ -128,6 +137,7 @@ const info = {
               .addFields(
                 { name: 'User ID', value: user.id, inline: true },
                 { name: 'Discord Join Timestamp', value: user.createdAt.toUTCString(), inline: false})
+              .setThumbnail(user.displayAvatarURL())
               .setTimestamp()
               .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
             if (interaction.guild_id && author === user) embed.addField('Server Join Timestamp', guild.member(user).joinedAt.toUTCString(), false);
@@ -147,7 +157,7 @@ const info = {
         .catch(console.error);
     } else if (subcommand === 'server') {
       if (!interaction.guild_id) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-        type: 4,
+        type: 2,
         data: {
           tts: false,
           content: 'This command is only available in servers!',
@@ -176,13 +186,12 @@ const info = {
           }
         }});
       }
-    } else if (subcommand === 'bot') api.getStats(client.user.id)
+    } else if (subcommand === 'bot') api.getStats(clientId)
       .then(stats => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
         type: 4,
         data: {
           tts: false,
-          embeds: [],
-          allowed_mentions: [new Discord.MessageEmbed()
+          embeds: [new Discord.MessageEmbed()
             .setColor('#85dbfc')
             .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
             .setTitle('Sekai Bot Information')
@@ -191,13 +200,71 @@ const info = {
               { name: 'Server Count', value: `**${stats.serverCount}** Servers`, inline: true },
               { name: 'Shard Count', value: `**${stats.shardCount}** Shards`, inline: true })
             .setTimestamp()
-            .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL())]
+            .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL())],
+          allowed_mentions: []
         }
       }}))
       .catch(console.error);
   }
 };
 
+const invite = {
+  data: {
+    name: 'invite',
+    description: 'Show invite links of Sekai.'
+  }, exec: (interaction, client, _args, api, _db) => api.getStats(clientId)
+    .then(stats => {
+      let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
+      client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+        type: 4,
+        data: {
+          tts: false,
+          content: '',
+          embeds: [new Discord.MessageEmbed()
+            .setColor('#85dbfc')
+            .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
+            .setTitle('Invite Sekai')
+            .addFields(
+              { name: 'Bot Invite', value: 'https://top.gg/bot/772460495949135893/invite', inline: true },
+              { name: 'Support Server Invite', value: 'https://discord.com/invite/sfwuVnTFJ2', inline: true },
+              { name: 'Server Count', value: `**${stats.serverCount}** Servers`, inline: true })
+            .setTimestamp()
+            .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL())],
+          allowed_mentions: []
+        }
+      }})
+    })
+    .catch(console.error)
+};
+
+const vote = {
+  data: {
+    name: 'vote',
+    description: 'Shows vote link for Sekai.'
+  }, exec: (interaction, client, _args, api, _db) => {
+    let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
+    api.hasVoted(author.id)
+      .then(voted => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+      type: 4,
+      data: {
+        tts: false,
+        content: '',
+        embeds: [new Discord.MessageEmbed()
+          .setColor('#85dbfc')
+          .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
+          .setTitle('Upvote Sekai')
+          .addFields(
+            { name: 'Bot Invite', value: 'https://top.gg/bot/772460495949135893/invite', inline: true },
+            { name: 'Voted', value: `${voted ? 'Yes' : 'No'}`, inline: true})
+          .setTimestamp()
+          .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL())],
+        allowed_mentions: []
+      }
+    }}))
+    .catch(console.error);
+  }
+};
+
 module.exports = {
-  help, commands, info
+  help, commands, info, invite, vote
 };
