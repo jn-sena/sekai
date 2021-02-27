@@ -136,7 +136,8 @@ const info = {
       Cache.getUserData(user.id)
         .then(data => api.hasVoted(user.id)
           .then(async voted => {
-            let guild = await client.guilds.fetch(interaction.guild_id);
+            let guild;
+            if (interaction.guild_id) guild = await client.guilds.fetch(interaction.guild_id);
             let embed = new Discord.MessageEmbed()
               .setColor('#85dbfc')
               .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
