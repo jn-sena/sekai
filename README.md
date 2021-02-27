@@ -38,7 +38,7 @@
 
 ## Usage
 
-* You can execute commands by putting `&` at the beginning.
+* You can execute commands by putting `/` at the beginning.
 * Example: `/info user @acedron#5561`
 * See `/help` for more information.
 * See `/commands` for available commands.
@@ -48,7 +48,7 @@
 | Syntax  | Meaning | Example | Example Usage |
 | ------- | ------- | ------- | ------------- |
 | /command | Base of the command. | **/help** | **/help** |
-| <> | Required argument. | /osu profile get **\<profile_id\>** \mode[\] | /osu profile get **10734834** |
+| <> | Required argument. | /osu profile get **\<profile_id\>** \[mode\] | /osu profile get **10734834** |
 | \[\] | Optional argument. | /info user **\[@user\]** | /info user **@acedron#5561** |
 | argument | Any argument. | /osu profile set <**profile_id**> | /osu profile set **0** |
 | @argument | Mention user. | /osu profile user \[**@user**\] \[mode\] | /osu profile user **@acedron#5561** |
