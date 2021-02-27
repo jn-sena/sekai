@@ -11,6 +11,7 @@ const help = {
     description: 'Shows the help text for Sekai.',
   }, exec: (interaction, client, _api, _db) => {
     let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
+
     let embed = new Discord.MessageEmbed()
       .setColor('#85dbfc')
       .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
@@ -41,18 +42,8 @@ const commands = {
   data: {
     name: 'commands',
     description: 'Show information about commands.',
-    options: [{
-      name: 'command',
-      description: 'The command to show information about.',
-      type: 3,
-      required: false
-    }]
   }, exec: (interaction, client, _api, _db) => {
     let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
-    let args = {};
-    if (interaction.data.options) interaction.data.options.forEach(e => {
-      args[e.name] = e.value;
-    });
 
     let embed = new Discord.MessageEmbed()
       .setColor('#85dbfc')
@@ -63,9 +54,8 @@ const commands = {
         { name: 'Miscellaneous', value: '**/help**\n\
 => Shows the help text for Sekai.\n\
 \n\
-**/commands** `[command]`\n\
+**/commands**\n\
 => Shows the list of commands.\n\
-=> Shows information about the command if given.\n\
 \n\
 **/info user** `[@user]`\n\
 => Shows information about the user.\n\
@@ -80,11 +70,21 @@ const commands = {
 => Shows invite links of Sekai.\n\
 \n\
 **/vote**\n\
-=> Shows vote link of Sekai.', inline: true })
+=> Shows vote link of Sekai.', inline: true },
+        { name: 'osu!', value: '**/osu profile get** `<profile_id>` `[mode]`\n\
+=> Shows the profile of the player with given id.\n\
+=> Shows the profile with specified mode if given.\n\
+\n\
+**/osu profile user** `[@user]` `[mode]`\n\
+=> Shows the profile of the mentioned user in Sekai database.\n\
+=> Shows the profile with specified mode if given.\n\
+\n\
+**/osu profile set** `<profile_id>`\n\
+=> Sets your osu! profile in Sekai database.', inline: true })
       .setTimestamp()
       .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
 
-    if (!args.command && author) author.send(embed)
+    if (author) author.send(embed)
       .catch(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
         type: 4,
         data: {
@@ -222,6 +222,7 @@ const invite = {
   }, exec: (interaction, client, api, _db) => api.getStats(clientId)
     .then(stats => {
       let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
+
       client.api.interactions(interaction.id, interaction.token).callback.post({data: {
         type: 4,
         data: {
@@ -250,24 +251,25 @@ const vote = {
     description: 'Shows vote link for Sekai.'
   }, exec: (interaction, client, api, _db) => {
     let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
+
     api.hasVoted(author.id)
       .then(voted => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-      type: 4,
-      data: {
-        tts: false,
-        content: '',
-        embeds: [new Discord.MessageEmbed()
-          .setColor('#85dbfc')
-          .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
-          .setTitle('Upvote Sekai')
-          .addFields(
-            { name: 'Bot Invite', value: 'https://top.gg/bot/772460495949135893/invite', inline: true },
-            { name: 'Voted', value: `${voted ? 'Yes' : 'No'}`, inline: true})
-          .setTimestamp()
-          .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL())],
-        allowed_mentions: []
-      }
-    }}))
+        type: 4,
+        data: {
+          tts: false,
+          content: '',
+          embeds: [new Discord.MessageEmbed()
+            .setColor('#85dbfc')
+            .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
+            .setTitle('Upvote Sekai')
+            .addFields(
+              { name: 'Bot Invite', value: 'https://top.gg/bot/772460495949135893/invite', inline: true },
+              { name: 'Voted', value: `${voted ? 'Yes' : 'No'}`, inline: true})
+            .setTimestamp()
+            .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL())],
+          allowed_mentions: []
+        }
+      }}))
     .catch(console.error);
   }
 };

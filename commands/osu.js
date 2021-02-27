@@ -39,11 +39,11 @@ const osu = {
       type: 2,
       options: [{
         name: 'get',
-        description: 'Shows the profile of the player.',
+        description: 'Shows the profile of the player with given id.',
         type: 1,
         options: [{
           name: 'profile_id',
-          description: 'The profile ID you want to get the profile of.',
+          description: 'The profile id you want to get the profile of.',
           type: 3,
           required: true
         }, {
@@ -99,7 +99,7 @@ const osu = {
         type: 1,
         options: [{
           name: 'profile_id',
-          description: 'The profile ID you want to set as your profile.',
+          description: 'The profile id you want to set as your profile.',
           type: 3,
           required: true
         }]
@@ -141,7 +141,7 @@ const osu = {
           type: 2,
           data: {
             tts: false,
-            content: 'Invalid user ID or mode!',
+            content: 'Invalid user id or mode!',
             embeds: [],
             allowed_mentions: [],
             flags: 1 << 6
@@ -196,7 +196,7 @@ const osu = {
           type: 2,
           data: {
             tts: false,
-            content: 'Invalid user ID!',
+            content: 'Invalid user id!',
             embeds: [],
             allowed_mentions: [],
             flags: 1 << 6
