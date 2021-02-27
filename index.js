@@ -59,7 +59,7 @@ client.on('ready', () => {
     const args = interaction.data.options;
 
     for (const i of commandModules) if (i[command]) {
-      i[command].exec(interaction, client, args, api, db);
+      i[command].exec(interaction, client, api, db);
       break;
     }
   });

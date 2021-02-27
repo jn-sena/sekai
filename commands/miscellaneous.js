@@ -9,7 +9,7 @@ const help = {
   data: {
     name: 'help',
     description: 'Shows the help text for Sekai.',
-  }, exec: (interaction, client, _args, _api, _db) => {
+  }, exec: (interaction, client, _api, _db) => {
     let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
     let embed = new Discord.MessageEmbed()
       .setColor('#85dbfc')
@@ -19,7 +19,7 @@ const help = {
       .addFields(
       { name: 'Usage', value: '`/<command> [options]`', inline: true },
       { name: 'Example', value: '`/help`', inline: false },
-      { name: 'Commands', value: '**See **`/commands** for commands!**', inline: true })
+      { name: 'Commands', value: '**See **`/commands`** for commands!**', inline: true })
       .setTimestamp()
       .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
 
@@ -47,8 +47,13 @@ const commands = {
       type: 3,
       required: false
     }]
-  }, exec: (interaction, client, args, _api, _db) => {
+  }, exec: (interaction, client, _api, _db) => {
     let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
+    let args = {};
+    if (interaction.data.options) interaction.data.options.forEach(e => {
+      args[e.name] = e.value;
+    });
+
     let embed = new Discord.MessageEmbed()
       .setColor('#85dbfc')
       .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
@@ -79,7 +84,7 @@ const commands = {
       .setTimestamp()
       .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
 
-    if (!args && author) author.send(embed)
+    if (!args.command && author) author.send(embed)
       .catch(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
         type: 4,
         data: {
@@ -90,8 +95,6 @@ const commands = {
         }
       }})
       .catch(console.error));
-    if (!args)
-    ;
   }
 };
 
@@ -118,14 +121,18 @@ const info = {
       description: 'Shows information about Sekai.',
       type: 1
     }]
-  }, exec: async (interaction, client, args, api, _db) => {
+  }, exec: async (interaction, client, api, _db) => {
     let subcommand = 'user';
-    if (args) subcommand = args[0].name;
+    if (interaction.data.options) subcommand = interaction.data.options[0].name;
     let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
+    let args = {};
+    if (interaction.data.options[0].options) interaction.data.options[0].options.forEach(e => {
+      args[e.name] = e.value;
+    });
 
     if (subcommand === 'user') {
       let user = author;
-      if (args[0].options) user = await client.users.fetch(args[0].options[0].value);
+      if (args.user) user = await client.users.fetch(args.user);
       Cache.getUserData(user.id)
         .then(data => api.hasVoted(user.id)
           .then(async voted => {
@@ -212,7 +219,7 @@ const invite = {
   data: {
     name: 'invite',
     description: 'Show invite links of Sekai.'
-  }, exec: (interaction, client, _args, api, _db) => api.getStats(clientId)
+  }, exec: (interaction, client, api, _db) => api.getStats(clientId)
     .then(stats => {
       let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
       client.api.interactions(interaction.id, interaction.token).callback.post({data: {
@@ -241,7 +248,7 @@ const vote = {
   data: {
     name: 'vote',
     description: 'Shows vote link for Sekai.'
-  }, exec: (interaction, client, _args, api, _db) => {
+  }, exec: (interaction, client, api, _db) => {
     let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
     api.hasVoted(author.id)
       .then(voted => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
