@@ -1,26 +1,84 @@
-const clear = (message, _client, args, _api, _db) => {
-  if (!message.guild) message.channel.send('This command can only be run in a server!')
-    .catch(console.error);
-  else if (!message.member.hasPermission('MANAGE_MESSAGES')) message.channel.send('You need `Manage Messages` permission to run this command!')
-    .catch(console.error);
-  else if (args.length < 1) message.channel.send('Please provide the number of messages to delete!')
-    .catch(console.error);
-  else {
-    let num = parseInt(args[0]);
-    if (num <= 0 || isNan(num)) message.channel.send('The number of messages to delete must be greater than 0!')
-      .catch(console.error);
-    else message.delete()
-      .then(() => message.channel.messages.fetch({ limit: num })
-        .then(fetched => message.channel.bulkDelete(fetched)
-          .then(messages => message.channel.send(`Successfully deleted ${messages.size} messages.`)
-            .then(m => setTimeout(() => m.delete(), 5e3))
-            .catch(console.error))
-          .catch(() => message.channel.send('Couldn\'t delete the messages!')
-            .catch(console.error))))
-      .catch(() => message.channel.send('Couldn\'t delete the messages!')
-        .catch(console.error));
+const Discord = require('discord.js');
+
+const clear = {
+  data: {
+    name: 'clear',
+    description: 'Deletes specified amount messages.',
+    options: [{
+      name: 'count',
+      description: 'The message count to delete.',
+      type: 4,
+      required: true
+    }]
+  }, exec: async (interaction, client, _api, _db) => {
+    let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
+    let args = {};
+    if (interaction.data.options) interaction.data.options.forEach(e => {
+      args[e.name] = e.value;
+    });
+
+    if (!interaction.guild_id) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+      type: 2,
+      data: {
+        tts: false,
+        content: 'This command is only available in servers!',
+        embeds: [],
+        allowed_mentions: [],
+        flags: 1 << 6
+      }
+    }});
+    else {
+      let guild = await client.guilds.fetch(interaction.guild_id);
+      if (!guild.member(author).hasPermission('MANAGE_MESSAGES')) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+        type: 2,
+        data: {
+          tts: false,
+          content: 'You need `Manage Messages` permission to run this command!',
+          embeds: [],
+          allowed_mentions: [],
+          flags: 1 << 6
+        }
+      }});
+      else {
+        if (args.count <= 0 || isNaN(args.count)) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+          type: 2,
+          data: {
+            tts: false,
+            content: 'Please provide the number of messages to delete!',
+            embeds: [],
+            allowed_mentions: [],
+            flags: 1 << 6
+          }
+        }});
+        else {
+          let channel = guild.channels.cache.get(interaction.channel_id);
+          channel.messages.fetch({ limit: args.count })
+            .then(fetched => channel.bulkDelete(fetched)
+              .then(messages => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+                type: 2,
+                data: {
+                  tts: false,
+                  content: `Successfully deleted ${messages.size} messages.`,
+                  embeds: [],
+                  allowed_mentions: [],
+                  flags: 1 << 6
+                }
+              }}))
+              .catch(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+                type: 2,
+                data: {
+                  tts: false,
+                  content: 'Couldn\'t delete the messages!',
+                  embeds: [],
+                  allowed_mentions: [],
+                  flags: 1 << 6
+                }
+              }})));
+        }
+      }
+    }
   }
-}
+};
 
 module.exports = {
   clear
