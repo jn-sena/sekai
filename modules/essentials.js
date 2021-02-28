@@ -1,5 +1,4 @@
 const default_guild_doc = {
-  prefix: '&',
   logs_channel: '',
   moderation_logs_channel: '',
   autoroles: []
