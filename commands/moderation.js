@@ -3,7 +3,7 @@ const Discord = require('discord.js');
 const clear = {
   data: {
     name: 'clear',
-    description: 'Deletes specified amount messages.',
+    description: 'Deletes specified amount of messages in current channel.',
     options: [{
       name: 'count',
       description: 'The message count to delete.',

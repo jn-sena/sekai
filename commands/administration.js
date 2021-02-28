@@ -4,7 +4,7 @@ const Cache = require('../modules/cache');
 const autoroles = {
   data: {
     name: 'autoroles',
-    description: 'Toggles autorole for role in current server. Role should be lower than the Sekai role.',
+    description: 'Toggles autorole for role in current server.\nRole should be lower than the Sekai role.',
     options: [{
       name: 'role',
       description: 'The role to toggle autorole for.',

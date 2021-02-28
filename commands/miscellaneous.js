@@ -80,7 +80,12 @@ const commands = {
 => Shows the profile with specified mode if given.\n\
 \n\
 **/osu profile set** `<profile_id>`\n\
-=> Sets your osu! profile in Sekai database.', inline: true })
+=> Sets your osu! profile in Sekai database.', inline: true },
+        { name: 'Moderation', value: '**/clear** `<count>`\n\
+=> Deletes specified amount of messages in current channel.', inline: true },
+        { name: 'Administration', value: '**/autorole** `<@&role>`\n\
+=> Toggles autorole for role in current server.\n\
+=> Role should be lower than the Sekai role.', inline: true })
       .setTimestamp()
       .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
 
