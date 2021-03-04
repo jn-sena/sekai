@@ -47,7 +47,8 @@ const clear = {
     }});
     else {
       let guild = await client.guilds.fetch(interaction.guild_id);
-      if (!guild.member(author).hasPermission('MANAGE_MESSAGES')) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+      let authorMember = await guild.members.fetch(author.id);
+      if (!authorMember.hasPermission('MANAGE_MESSAGES')) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
         type: 2,
         data: {
           tts: false,
@@ -132,7 +133,8 @@ const kick = {
     }});
     else {
       let guild = await client.guilds.fetch(interaction.guild_id);
-      if (!guild.member(author).hasPermission('KICK_MEMBERS')) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+      let authorMember = await guild.members.fetch(author.id);
+      if (!authorMember.hasPermission('KICK_MEMBERS')) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
         type: 2,
         data: {
           tts: false,

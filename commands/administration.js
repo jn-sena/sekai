@@ -31,7 +31,7 @@ const autoroles = {
     else {
       let guild = await client.guilds.fetch(interaction.guild_id);
       let authorMember = await guild.members.fetch(author.id);
-      if (authorMember.hasPermission('MANAGE_ROLES')) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+      if (!authorMember.hasPermission('MANAGE_ROLES')) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
         type: 2,
         data: {
           tts: false,
