@@ -131,31 +131,43 @@ const cases = {
         let fields = [];
         let id = args.member ? args.member : author.id;
         let user = await client.users.fetch(id);
-        for (let key in data) if (data.hasOwnProperty(key) && data[key].effected === id) fields.push({
-          name: `Case ${key}`,
-          value: ` => **Issued by:** <@${data[key].by}>\n\
- => **Issued on:** ${new Date(data[key].date).toUTCString()}\n\
- => **Reason:** ${data[key].reason ? data[key].reason : 'Not provided.'}\n\
- => **Case Type:** \`${data[key].type}\``, inline: true
-        });
-
-        client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-          type: 4,
+        if (user.bot) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+          type: 2,
           data: {
             tts: false,
-            content: '',
-            embeds: [new Discord.MessageEmbed()
-              .setColor('#85dbfc')
-              .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
-              .setTitle(`Moderation Cases About @${user.tag}`)
-              .setDescription(`<@${user.id}> (${user.id})\n\n\
-    ${fields.length < 1 ? '***No moderation cases recorded.***' : ''}`)
-              .setTimestamp()
-              .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL())
-              .addFields(fields)],
-            allowed_mentions: []
+            content: 'Please mention a member!',
+            embeds: [],
+            allowed_mentions: [],
+            flags: 1 << 6
           }
         }});
+        else {
+          for (let key in data) if (data.hasOwnProperty(key) && data[key].effected === id) fields.push({
+            name: `Case ${key}`,
+            value: ` => **Issued by:** <@${data[key].by}>\n\
+   => **Issued on:** ${new Date(data[key].date).toUTCString()}\n\
+   => **Reason:** ${data[key].reason ? data[key].reason : 'Not provided.'}\n\
+   => **Case Type:** \`${data[key].type}\``, inline: true
+          });
+
+          client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+            type: 4,
+            data: {
+              tts: false,
+              content: '',
+              embeds: [new Discord.MessageEmbed()
+                .setColor('#85dbfc')
+                .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
+                .setTitle(`Moderation Cases About @${user.tag}`)
+                .setDescription(`<@${user.id}> (${user.id})\n\n\
+      ${fields.length < 1 ? '***No moderation cases recorded.***' : ''}`)
+                .setTimestamp()
+                .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL())
+                .addFields(fields)],
+              allowed_mentions: []
+            }
+          }});
+        }
       })
       .catch(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
         type: 2,
@@ -218,7 +230,17 @@ const kick = {
       else {
         let reason = args.reason ? args.reason : null;
         let member = await guild.members.fetch(args.member);
-        member.kick(reason)
+        if (member.user.bot) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+          type: 2,
+          data: {
+            tts: false,
+            content: 'Please mention a member!',
+            embeds: [],
+            allowed_mentions: [],
+            flags: 1 << 6
+          }
+        }});
+        else member.kick(reason)
           .then(() => registerCase(interaction.guild_id, db, {
             type: 'kick',
             by: author.id,
