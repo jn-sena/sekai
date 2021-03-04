@@ -5,10 +5,14 @@ const Cache = require('../modules/cache.js');
 const registerCase = (guildId, db, moderationData) => new Promise((resolve, reject) => Cache.getModerationCases(guildId)
   .then(data => {
     let date = new Date();
-    let keys = Object.keys(data).sort((a, b) => (a - b));
-    let newId = (parseInt(keys[keys.length - 1]) + 1).toString();
+    let newId = '0';
+    if (data && Object.keys(data).length >= 1) {
+      let keys = Object.keys(data).sort((a, b) => (a - b));
+      newId = (parseInt(keys[keys.length - 1]) + 1).toString();
+    }
     moderationData.date = date.toISOString();
-    db.collection('guilds').doc(guildId).collection('cases').doc(newId.toString()).set(moderationData)
+    db.collection('guilds').doc(guildId).collection('cases').doc(newId).set(moderationData)
+      .then(() => Cache.cacheModerationCases(guildId))
       .then(() => resolve(newId))
       .catch(reject);
   })

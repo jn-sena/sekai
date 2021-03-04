@@ -92,7 +92,7 @@ class Cache {
           resolve(this.moderationCaseCaches[guildId]);
         })
         .catch(reject);
-      else resolve({});
+      else resolve(this.moderationCaseCaches[guildId]);
     });
   }
 
