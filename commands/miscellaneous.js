@@ -148,7 +148,17 @@ const info = {
     if (subcommand === 'user') {
       let user = author;
       if (args.user) user = await client.users.fetch(args.user);
-      Cache.getUserData(user.id)
+      if (user.bot) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+        type: 2,
+        data: {
+          tts: false,
+          content: 'Please mention a member!',
+          embeds: [],
+          allowed_mentions: [],
+          flags: 1 << 6
+        }
+      }});
+      else Cache.getUserData(user.id)
         .then(data => api.hasVoted(user.id)
           .then(async voted => {
             let guild;

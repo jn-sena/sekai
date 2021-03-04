@@ -123,7 +123,9 @@ const osu = {
         let userId = '';
         if (subcommand === 'get') userId = args.profile_id;
         else if (subcommand === 'user') {
-          let userData = await Cache.getUserData(args.user ? args.user : author.id);
+          let user = await client.users.fetch(args.user ? args.user : author.id);
+          if (user.bot) user = await client.users.fetch(author.id);
+          let userData = await Cache.getUserData(user.id);
           userId = userData.osu_profile;
         }
         let mode = args.mode ? args.mode : '';
