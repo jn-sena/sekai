@@ -21,13 +21,14 @@ class Logger {
             let embed = new Discord.MessageEmbed()
               .setColor('#85dbfc')
               .setTimestamp()
+              .setDescription(embedData.description ? embedData.description : 'Not provided.')
               .setAuthor(embedData.author ? embedData.author.tag : guild.name, embedData.author ? embedData.author.displayAvatarURL() : guild.iconURL())
               .setFooter(embedData.footer ? embedData.footer : 'log');
             if (embedData.fields) embed.addFields(embedData.fields);
-            guild.channels.get(channelId).send(embed)
+            guild.channels.resolve(channelId).send(embed)
               .then(resolve)
-              .catch(reject);
-          }
+              .catch(() => {});
+          } else resolve();
         })
         .catch(reject);
     });

@@ -217,7 +217,16 @@ const info = {
           allowed_mentions: []
         }
       }}))
-      .catch(console.error);
+      .catch(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+        type: 2,
+        data: {
+          tts: false,
+          content: 'Couldn\'t kick the user!',
+          embeds: [],
+          allowed_mentions: [],
+          flags: 1 << 6
+        }
+      }}));
   }
 };
 

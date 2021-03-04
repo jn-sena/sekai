@@ -82,7 +82,7 @@ class Cache {
 
   static getModerationCases(guildId) {
     return new Promise((resolve, reject) => {
-      if (!this.moderationCaseCaches[guildId]) db.collection('guilds').doc(guildId).collection('cases').get()
+      if (!this.moderationCaseCaches[guildId]) this.db.collection('guilds').doc(guildId).collection('cases').get()
         .then(querySnapshot => {
           if (!this.moderationCaseCaches[guildId]) this.moderationCaseCaches[guildId] = {};
           if (!querySnapshot.empty) querySnapshot.forEach(documentSnapshot => {
