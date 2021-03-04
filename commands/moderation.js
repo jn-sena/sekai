@@ -99,6 +99,77 @@ const clear = {
   }
 };
 
+const cases = {
+  data: {
+    name: 'cases',
+    description: 'Shows the cases about the specified member.',
+    options: [{
+      name: 'member',
+      description: 'The member to show cases about.',
+      type: 6,
+      required: false
+    }]
+  }, exec: (interaction, client, _api, _db) => {
+    let author = new Discord.User(client, interaction.member ? interaction.member.user : interaction.user);
+    let args = {};
+    if (interaction.data.options) interaction.data.options.forEach(e => {
+      args[e.name] = e.value;
+    });
+
+    if (!interaction.guild_id) client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+      type: 2,
+      data: {
+        tts: false,
+        content: 'This command is only available in servers!',
+        embeds: [],
+        allowed_mentions: [],
+        flags: 1 << 6
+      }
+    }});
+    else Cache.getModerationCases(interaction.guild_id)
+      .then(async data => {
+        let fields = [];
+        let id = args.member ? args.member : author.id;
+        let user = await client.users.fetch(id);
+        for (let key in data) if (data.hasOwnProperty(key) && data[key].effected === id) fields.push({
+          name: `Case ${key}`,
+          value: ` => **Issued by:** <@${data[key].by}>\n\
+ => **Issued on:** ${new Date(data[key].date).toUTCString()}\n\
+ => **Reason:** ${data[key].reason ? data[key].reason : 'Not provided.'}\n\
+ => **Case Type:** \`${data[key].type}\``, inline: true
+        });
+
+        client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+          type: 4,
+          data: {
+            tts: false,
+            content: '',
+            embeds: [new Discord.MessageEmbed()
+              .setColor('#85dbfc')
+              .setAuthor('Sekai ＊ 世界', client.user.displayAvatarURL(), 'https://top.gg/bot/772460495949135893')
+              .setTitle(`Moderation Cases About @${user.tag}`)
+              .setDescription(`<@${user.id}> (${user.id})\n\n\
+    ${fields.length < 1 ? '***No moderation cases recorded.***' : ''}`)
+              .setTimestamp()
+              .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL())
+              .addFields(fields)],
+            allowed_mentions: []
+          }
+        }});
+      })
+      .catch(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+        type: 2,
+        data: {
+          tts: false,
+          content: 'Couldn\'t get moderation case data!',
+          embeds: [],
+          allowed_mentions: [],
+          flags: 1 << 6
+        }
+      }}))
+  }
+};
+
 const kick = {
   data: {
     name: 'kick',
@@ -181,5 +252,5 @@ const kick = {
 };
 
 module.exports = {
-  clear, kick
+  clear, cases, kick
 };

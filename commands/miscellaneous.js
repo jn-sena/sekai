@@ -25,6 +25,9 @@ const help = {
       .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
 
     if (author) author.send(embed)
+      .then(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+        type: 2,
+      }}))
       .catch(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
         type: 4,
         data: {
@@ -33,8 +36,7 @@ const help = {
           embeds: [embed],
           allowed_mentions: []
         }
-      }})
-      .catch(console.error));
+      }}));
   }
 };
 
@@ -82,7 +84,13 @@ const commands = {
 **/osu profile set** `<profile_id>`\n\
 => Sets your osu! profile in Sekai database.', inline: true },
         { name: 'Moderation', value: '**/clear** `<count>`\n\
-=> Deletes specified amount of messages in current channel.', inline: true },
+=> Deletes specified amount of messages in current channel.\n\
+\n\
+**/cases** `[@member]`\n\
+=> Shows the cases about the specified member.\n\
+\n\
+**/kick** `<@member>` `[reason]`\n\
+=> Kicks the specified member from current server.', inline: true },
         { name: 'Administration', value: '**/autorole** `<@&role>`\n\
 => Toggles autorole for role in current server.\n\
 => Role should be lower than the Sekai role.', inline: true })
@@ -90,6 +98,9 @@ const commands = {
       .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
 
     if (author) author.send(embed)
+      .then(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
+        type: 2,
+      }}))
       .catch(() => client.api.interactions(interaction.id, interaction.token).callback.post({data: {
         type: 4,
         data: {
@@ -98,8 +109,7 @@ const commands = {
           embeds: [embed],
           allowed_mentions: []
         }
-      }})
-      .catch(console.error));
+      }}));
   }
 };
 
@@ -221,7 +231,7 @@ const info = {
         type: 2,
         data: {
           tts: false,
-          content: 'Couldn\'t kick the user!',
+          content: 'Couldn\'t get bot data!',
           embeds: [],
           allowed_mentions: [],
           flags: 1 << 6
