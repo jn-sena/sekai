@@ -90,10 +90,13 @@ const commands = {
 => Shows the cases about the specified member.\n\
 \n\
 **/kick** `<@member>` `[reason]`\n\
-=> Kicks the specified member from current server.', inline: true },
+=> Kicks the specified member from current server.', inline: false },
         { name: 'Administration', value: '**/autorole** `<@&role>`\n\
 => Toggles autorole for role in current server.\n\
-=> Role should be lower than the Sekai role.', inline: true })
+=> Role should be lower than the Sekai role.\n\
+\n\
+**/logs** `<scope>` `<#channel>`\n\
+=> Sets the specified action to log in specified channel.', inline: true })
       .setTimestamp()
       .setFooter(`Requested by: ${author.tag}`, author.displayAvatarURL());
 

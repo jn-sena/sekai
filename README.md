@@ -48,11 +48,12 @@
 | Syntax  | Meaning | Example | Example Usage |
 | ------- | ------- | ------- | ------------- |
 | /command | Base of the command. | **/help** | **/help** |
-| <> | Required argument. | /osu profile get **\<profile_id\>** \[mode\] | /osu profile get **10734834** |
-| \[\] | Optional argument. | /info user **\[@user\]** | /info user **@acedron#5561** |
-| argument | Any argument. | /osu profile set <**profile_id**> | /osu profile set **0** |
-| @argument | Mention user. | /osu profile user \[**@user**\] \[mode\] | /osu profile user **@acedron#5561** |
-| @&argument | Mention role. | /autorole \<**@&role**\> | /autorole **@role** |
+| <> | Required argument. | /osu profile get `<profile_id>` `[mode]` | /osu profile get `profile_id: 10734834` |
+| \[\] | Optional argument. | /info user `[@user]` | /info user `user: @acedron#5561` |
+| argument | Any argument. | /osu profile set `<profile_id>` | /osu profile set `profile_id: 0` |
+| @argument | Mention user. | /osu profile user `[@user]` `[mode]` | /osu profile user `user: @acedron#5561` |
+| @&argument | Mention role. | /autorole `<@&role>` | /autorole `role: @role` |
+| #argument | Mention channel. | /logs `<scope>` `<#channel>` | /logs `scope: General Logs` `channel: #logs` |
 
 ## Installation for Development
 
