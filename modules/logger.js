@@ -14,7 +14,7 @@ class Logger {
 
   static log(guild, embedData, moderation = false) {
     return new Promise((resolve, reject) => {
-      if (guild !== null) this.Cache.getGuildData(guild.id)
+      if (guild) this.Cache.getGuildData(guild.id)
         .then(data => {
           let channelId = moderation ? data.moderation_logs_channel : data.logs_channel;
           if (channelId) {

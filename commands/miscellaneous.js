@@ -91,7 +91,7 @@ const commands = {
 \n\
 **/kick** `<@member>` `[reason]`\n\
 => Kicks the specified member from current server.', inline: false },
-        { name: 'Administration', value: '**/autorole** `<@&role>`\n\
+        { name: 'Administration', value: '**/autoroles** `<@&role>`\n\
 => Toggles autorole for role in current server.\n\
 => Role should be lower than the Sekai role.\n\
 \n\

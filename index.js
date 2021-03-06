@@ -56,7 +56,6 @@ client.on('ready', () => {
 
   client.ws.on('INTERACTION_CREATE', interaction => {
     const command = interaction.data.name.toLowerCase();
-    const args = interaction.data.options;
 
     for (const i of commandModules) if (i[command]) {
       i[command].exec(interaction, client, api, db);
@@ -126,7 +125,7 @@ client.on('guildMemberAdd', member => Cache.getGuildData(member.guild.id)
   })
   .catch(console.error));
 
-client.on('guildMemberRemove', member => Logger.log(guild, {
+client.on('guildMemberRemove', member => Logger.log(member.guild, {
   description: `Member left: <@${member.id}> (${member.id}).`,
   footer: `guildMemberRemove・${member.id}`
 }, false));
