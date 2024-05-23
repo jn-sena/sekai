@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/acedron/sekai.git"
+    "url": "git+https://github.com/jn-sena/sekai.git"
   },
   "keywords": [
     "discord",
@@ -17,10 +17,7 @@
   ],
   "author": "acedron",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/acedron/sekai/issues"
-  },
-  "homepage": "https://github.com/acedron/sekai#readme",
+  "homepage": "https://github.com/jn-sena/sekai?tab=readme-ov-file#readme",
   "dependencies": {
     "@top-gg/sdk": "^3.0.7",
     "discord.js": "^12.5.1",

@@ -3,37 +3,16 @@
   <h4 align="center">A multipurpose Discord bot.</h4>
 
   <h6 align="center">
-    <a href="https://github.com/acedron/sekai">
-      <img src="https://img.shields.io/github/license/acedron/sekai?style=for-the-badge" alt="License" /></a>
-    <a href="https://github.com/acedron/sekai/commits/master">
+    <a href="https://github.com/jn-sena/sekai">
+      <img src="https://img.shields.io/github/license/jn-sena/sekai?style=for-the-badge" alt="License" /></a>
+    <a href="https://github.com/jn-sena/sekai/commits/main">
       <img src="https://img.shields.io/maintenance/yes/2021?style=for-the-badge" alt="Maintenance" /></a>
-    <a href="https://github.com/acedron/sekai/commit/master">
-      <img src="https://img.shields.io/github/last-commit/acedron/sekai?style=for-the-badge" alt="Last Commit" /></a>
-    <a href="https://github.com/acedron/sekai/actions">
-      <img src="https://img.shields.io/github/workflow/status/acedron/sekai/Node.js%20CI?style=for-the-badge" alt="Continuous Integration" /></a>
     <br/>
-    <a href="https://www.heroku.com">
-      <img src="https://img.shields.io/badge/Running%20On-Heroku-blueviolet?style=for-the-badge" alt="Running On" /></a>
-    <a href="https://discord.js.org">
-      <img src="https://img.shields.io/badge/Powered%20By-discord.js-blue?style=for-the-badge" alt="Powered By" /></a>
-    <a href="https://firebase.google.com">
-      <img src="https://img.shields.io/badge/Powered%20By-Firebase-orange?style=for-the-badge" alt="Powered By" /></a>
-    <br/><br/>
-    <a href="https://top.gg/bot/772460495949135893">
-      <img src="https://top.gg/api/widget/status/772460495949135893.svg" alt="Bot Status" /></a>
-    <a href="https://top.gg/bot/772460495949135893">
-      <img src="https://top.gg/api/widget/servers/772460495949135893.svg" alt="Bot Server Count" /></a>
-    <a href="https://top.gg/bot/772460495949135893">
-      <img src="https://top.gg/api/widget/upvotes/772460495949135893.svg" alt="Bot Upvote Count" /></a>
   </h6>
 
-  <h3 align="center">
-    <a href="https://top.gg/bot/772460495949135893/invite">
-        Invite to Your Server!</a>
-  </h3>
-  <h4 align="center">
-    This project is still a work in progress!
-  </h4>
+  <h2 align="center">
+    this project was discontinued in 2021 and archived in 2024.
+  </h2>
 </p>
 
 ## Usage
@@ -61,7 +40,7 @@
 * You need to have `node`, `git` and `npm` installed.
 
 ```bash
-$ git clone https://github.com/acedron/sekai.git
+$ git clone https://github.com/jn-sena/sekai.git
 $ cd sekai
 $ npm i
 ```
